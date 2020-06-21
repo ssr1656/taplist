@@ -51,6 +51,7 @@ const Icon = props => {
   } else if (srm > 40) {
     srm = 40;
   }
+  srm = Math.round(srm - 1);
   const beerColor = colorMap[srm]
   return (
     <svg
