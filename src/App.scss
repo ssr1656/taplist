@@ -1,0 +1,108 @@
+body {
+  background-image: url(./assets/img/background.jpg);
+  background-color: #ffffff;
+  color: #e6e6e6;
+  background-size: 100%;
+  user-select: none;
+}
+
+html, body , #root{
+width: 100%;
+height: 100%;
+margin: 0;
+}
+
+.App {
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+  header {
+    flex: 0 1 auto;
+    height: 70px;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    margin: 5px;
+    .title {
+      font-family: 'FrederickatheGreat';
+      text-align: center;
+      width: 100%
+    }
+  }
+  footer {
+    flex: 0 1 auto;
+  }
+  main {
+    flex: 1 1 auto;
+    margin: 0 10px 0 10px;
+    display: flex;
+    flex-flow: column nowrap;
+
+    .tap-item {
+      // background-color: #2f3035;
+      height: 100%
+    }
+    
+    .tap-item:nth-child(odd){
+      background-color: #424348;
+      background: rgba(66, 67, 72, 0.4);
+    }
+
+    .ibu-container{
+      position: relative;
+      height:100px;
+      width:53px;
+      margin: 0 auto;
+    }
+    // .ibu-indicator{
+    //   position: absolute;
+    //   bottom: 0;
+    //   left: 0;
+    //   height: 100%;
+    //   width: 100%;
+    //   background: url(./assets/img/ibu/stroke.png) no-repeat bottom left;
+    // }
+    // .ibu-indicator .ibu-full{
+    //   position: absolute;
+    //   bottom: 0;
+    //   left: 0;
+    //   width: 100%;
+    //   background: url(./assets/img/ibu/full.png) no-repeat bottom left;
+    // }
+  }
+}
+
+.button-success,
+.button-error,
+.button-warning,
+.button-secondary {
+  color: white;
+  border-radius: 5px;
+  border: 1px solid #18ab29;
+  display: inline-block;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 5px 15px;
+}
+
+.button-success {
+  background-color:#44c767;
+}
+
+.button-error {
+  background: rgb(202, 60, 60);
+  /* this is a maroon */
+}
+
+.button-warning {
+  background: #adadad;
+  /* this is an orange */
+}
+
+.button-secondary {
+  background: rgb(66, 184, 221);
+  /* this is a light blue */
+}
+
+
+
