@@ -39,6 +39,7 @@ export default class SettingManager extends Component {
     this.addRow = this.addRow.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.deleteRow = this.deleteRow.bind(this);
+    this.resetAll = this.resetAll.bind(this);
     this.list = {
 
     }
@@ -113,6 +114,11 @@ export default class SettingManager extends Component {
     if (screenfull.isEnabled) {
       screenfull.toggle();
     }
+  }
+
+  resetAll() {
+    this.setState({finalData: {...this.state.finalData, tapList:[this.state.defaultListValues]}});
+    localStorage.removeItem('finalData');
   }
 
 
@@ -259,8 +265,9 @@ export default class SettingManager extends Component {
               })}
               </tbody>
           </table>
+          <button className="btn-reset button-error" onClick={this.resetAll}>Reset All</button>
           <div className="btn-submit">
-            <button className="button-warning" onClick={this.onCancel}>Cancel</button>
+            <button className="btn-cancel button-warning" onClick={this.onCancel}>Cancel</button>
             <button className="button-success" onClick={this.onSave}>Save</button>
           </div>
           
