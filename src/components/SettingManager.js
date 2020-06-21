@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import screenfull from "screenfull";
 import './SettingManager.scss';
 
 export default class SettingManager extends Component {
@@ -108,6 +109,12 @@ export default class SettingManager extends Component {
     this.setState({finalData: existingState});
   }
 
+  toggleFullscreen() {
+    if (screenfull.isEnabled) {
+      screenfull.toggle();
+    }
+  }
+
 
   render() {
     const tapList = this.state.finalData.tapList || []
@@ -139,6 +146,9 @@ export default class SettingManager extends Component {
         </div>
 
         <div className="top-settings">
+        <div className="full-screen">
+              <button className="add-row button-secondary" onClick={this.toggleFullscreen}>Make app full screen</button>
+            </div>
           <form>
             <div className="misc-settings">
               <label>Display title bar:</label>
@@ -163,6 +173,7 @@ export default class SettingManager extends Component {
                   checked={displayPourColumn}
                   onChange={this.handleInputChange} />
             </div>
+            
 
             <fieldset className="font-settings">
               <legend>Set font size:</legend>

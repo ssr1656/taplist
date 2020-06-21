@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import './App.scss';
 import Taplist from './components/Taplist';
-import SettingManager from './components/SettingManager'
+import SettingManager from './components/SettingManager';
 
 class App extends Component {
   constructor(props) {
@@ -26,8 +26,13 @@ class App extends Component {
   switchView(view) {
     this.setState({view: this.state.view === "list"? "settings" : "list"})
   }
+
   onDataChange(data) {
-    this.setState({displayTitleBar: data.displayTitleBar, titleFontSize: data.titleFontSize, pageTitle: data.pageTitle});
+    this.setState({
+      displayTitleBar: data.displayTitleBar, 
+      titleFontSize: data.titleFontSize, 
+      pageTitle: data.pageTitle
+    });
   }
   render() {
     const {view, displayTitleBar, titleFontSize, pageTitle} = this.state;
