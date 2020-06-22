@@ -18,7 +18,7 @@ export default class SettingManager extends Component {
         alcohol: 6.6,
         poured: 0,
         quantity: 640,
-        pourSize: 16,
+        servingSize: 16,
         randomNum: this.getRandomNumer()
       },
       finalData: {
@@ -75,7 +75,7 @@ export default class SettingManager extends Component {
   onValueChange(i, event) {
     let existingState = this.state.finalData;
     const targetValue = event.target.value;
-    if(isNaN(targetValue)) {
+    if(targetValue === "" || isNaN(targetValue)) {
       existingState.tapList[i][event.target.name] = event.target.value
     } else {
       existingState.tapList[i][event.target.name] = Number(event.target.value)
@@ -258,7 +258,7 @@ export default class SettingManager extends Component {
                     <td><input type="number" name="alcohol" value={item.alcohol} onChange={event => this.onValueChange(i, event)}/></td>
                     <td><input type="number" disabled={!displayPourColumn} name="poured" value={item.poured} onChange={event => this.onValueChange(i, event)}/></td>
                     <td><input type="number" disabled={!displayPourColumn} name="quantity" value={item.quantity} onChange={event => this.onValueChange(i, event)}/></td>
-                    <td><input type="number" disabled={!displayPourColumn} name="pourSize" value={item.pourSize} onChange={event => this.onValueChange(i, event)}/></td>
+                    <td><input type="number" disabled={!displayPourColumn} name="servingSize" value={item.servingSize} onChange={event => this.onValueChange(i, event)}/></td>
                     <td><button className="button-error" onClick={event => this.deleteRow(i)}>Delete</button></td>
                   </tr>
                 );

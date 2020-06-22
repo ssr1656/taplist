@@ -25,7 +25,7 @@ export default class Taplist extends Component {
                 alcohol: 6.6,
                 poured: 0,
                 quantity: 526,
-                pourSize: 12
+                servingSize: 16
             }
         ]
       }
@@ -44,8 +44,8 @@ export default class Taplist extends Component {
     const data = {...this.state.data};
     let tapList = [...data.tapList];
     let tapItem = {...tapList[index]};
-    tapItem.poured += tapItem.pourSize;
-    tapItem.quantity -= tapItem.pourSize;
+    tapItem.poured = Number(tapItem.poured) + Number(tapItem.servingSize);
+    tapItem.quantity = Number(tapItem.quantity) -  Number(tapItem.servingSize);
     tapList[index] = tapItem
     data.tapList = tapList
     this.setState({data: data}, () => {
@@ -97,11 +97,8 @@ export default class Taplist extends Component {
         </div>
 
         {tapList.map((item, i) => {
-          console.log("********>>>> ", item.name)
           const totalOriginalQuantity = item.quantity + item.poured;
           const filled = ((totalOriginalQuantity-item.poured)/totalOriginalQuantity) * 100;
-          console.log("item.quantity>>>> ", item.quantity)
-          console.log("item.poured>>>> ", item.poured)
           return (
             <div className={"tap-row " + (displayPourColumn ? 'pour-column' : '')} key={i} style={{fontSize: beerDescriptionFontSize}}>
               <div className="tap-no row-item">{i + 1}</div>
