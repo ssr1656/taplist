@@ -144,7 +144,7 @@ export default class Taplist extends Component {
                   {item.calories} Kcal
                 </div>
                 <div className="beer-alcohol">
-                  {item.bitterness}% ABV
+                  {item.alcohol}% ABV
                 </div>
               </div>
               {displayPourColumn && <div className="poured-remaining row-item">
