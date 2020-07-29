@@ -8,6 +8,7 @@ export default class Taplist extends Component {
     this.state = {
       data: {
         displayPourColumn: true,
+        displayServingGlasses: false,
         headerFontSize: 14,
         beerNameFontSize: 18,
         beerStyleFontSize: 14,
@@ -25,7 +26,9 @@ export default class Taplist extends Component {
                 alcohol: 6.6,
                 poured: 0,
                 quantity: 526,
-                servingSize: 16
+                servingSize_s: 12,
+                servingSize: 16,
+                servingSize_l: 21
             }
         ]
       }
@@ -35,17 +38,32 @@ export default class Taplist extends Component {
 
   componentDidMount() {
     const localData = JSON.parse(localStorage.getItem("finalData"))
+    // make sure servingSize_s & servingSize_l are part of existing data
+    const taplist = this.state.data.tapList[0]
+    localData.tapList.forEach(element => {
+      if(!element.servingSize_s) {
+        element.servingSize_s = taplist.servingSize_s
+      }
+      if(!element.servingSize_l) {
+        element.servingSize_l = taplist.servingSize_l
+      }
+    });
+
     if(localData) {
-      this.setState({data: localData});
+      this.setState({data: localData}, () => {
+        localStorage.setItem('finalData', JSON.stringify(this.state.data));
+      })
     }
+    
   }
 
   onKegClick(index, event) {
+    const itemClicked = event.currentTarget.className === "keg-icon" ? "servingSize" :event.currentTarget.className ;
     const data = {...this.state.data};
     let tapList = [...data.tapList];
     let tapItem = {...tapList[index]};
-    tapItem.poured = Number(tapItem.poured) + Number(tapItem.servingSize);
-    tapItem.quantity = Number(tapItem.quantity) -  Number(tapItem.servingSize);
+    tapItem.poured = Number(tapItem.poured) + Number(tapItem[itemClicked]);
+    tapItem.quantity = Number(tapItem.quantity) -  Number(tapItem[itemClicked]);
     tapList[index] = tapItem
     data.tapList = tapList
     this.setState({data: data}, () => {
@@ -58,6 +76,7 @@ export default class Taplist extends Component {
     const {
       tapList,
       displayPourColumn,
+      displayServingGlasses,
       headerFontSize,
       beerNameFontSize,
       beerStyleFontSize,
@@ -134,9 +153,20 @@ export default class Taplist extends Component {
                   {item.style}
                   </div>
                 </div>
-                <div className="beer-desc">
+                <div className={"beer-desc " + (displayServingGlasses ? 'short' : 'full')}>
                   {item.notes}
                 </div>
+                {displayServingGlasses && <div className="glasses" >
+                  <div className='servingSize_s' onClick={event => this.onKegClick(i, event)}>
+                    <GlassIcon srm={5}/>
+                  </div>
+                  <div className='servingSize' onClick={event => this.onKegClick(i, event)}>
+                    <GlassIcon srm={10}/>
+                  </div>
+                  <div className='servingSize_l' onClick={event => this.onKegClick(i, event)}>
+                    <GlassIcon srm={20}/>
+                  </div>
+                </div>}
               </div>
 
               <div className="calories-alcohol row-item">

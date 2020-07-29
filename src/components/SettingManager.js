@@ -18,12 +18,15 @@ export default class SettingManager extends Component {
         alcohol: 6.6,
         poured: 0,
         quantity: 640,
+        servingSize_s: 12,
         servingSize: 16,
+        servingSize_l: 21,
         randomNum: this.getRandomNumer()
       },
       finalData: {
         displayTitleBar: true,
         displayPourColumn: true,
+        displayServingGlasses: false,
         pageTitle: "My Taplist",
         titleFontSize: 50,
         headerFontSize: 14,
@@ -60,7 +63,7 @@ export default class SettingManager extends Component {
   handleInputChange(event) {
     let existingState = this.state.finalData
     const targetName = event.target.name;
-    if(targetName === "displayTitleBar" || targetName === "displayPourColumn") {
+    if(targetName === "displayTitleBar" || targetName === "displayPourColumn" || targetName === "displayServingGlasses") {
       existingState[targetName] = !existingState[targetName];
     } else {
       if(targetName === "pageTitle") {
@@ -132,7 +135,8 @@ export default class SettingManager extends Component {
       headerFontSize,
       beerNameFontSize,
       beerDescriptionFontSize,
-      beerStyleFontSize
+      beerStyleFontSize,
+      displayServingGlasses
     } = this.state.finalData
     return (
       <div className="manager">
@@ -178,6 +182,14 @@ export default class SettingManager extends Component {
                   type="checkbox"
                   checked={displayPourColumn}
                   onChange={this.handleInputChange} />
+              <br/>
+              <label>Display serving glasses:</label>
+              <input
+                  name="displayServingGlasses"
+                  type="checkbox"
+                  checked={displayServingGlasses}
+                  onChange={this.handleInputChange} 
+                  disabled={!displayPourColumn}/>
             </div>
             
 
@@ -241,7 +253,9 @@ export default class SettingManager extends Component {
                 <th>Alcohol (ABV)</th>
                 <th>Poured (oz)</th>
                 <th>Quantity (oz)</th>
-                <th>Pint size (oz)</th>
+                <th>Small serve (oz)</th>
+                <th>Medium serve (oz)</th>
+                <th>Large serve (oz)</th>
                 <th>Delete row</th>
               </tr>
               {tapList.map((item, i) => {
@@ -258,7 +272,9 @@ export default class SettingManager extends Component {
                     <td><input type="number" name="alcohol" value={item.alcohol} onChange={event => this.onValueChange(i, event)}/></td>
                     <td><input type="number" disabled={!displayPourColumn} name="poured" value={item.poured} onChange={event => this.onValueChange(i, event)}/></td>
                     <td><input type="number" disabled={!displayPourColumn} name="quantity" value={item.quantity} onChange={event => this.onValueChange(i, event)}/></td>
+                    <td><input type="number" disabled={!displayPourColumn || !displayServingGlasses} name="servingSize_s" value={item.servingSize_s} onChange={event => this.onValueChange(i, event)}/></td>
                     <td><input type="number" disabled={!displayPourColumn} name="servingSize" value={item.servingSize} onChange={event => this.onValueChange(i, event)}/></td>
+                    <td><input type="number" disabled={!displayPourColumn || !displayServingGlasses} name="servingSize_l" value={item.servingSize_l} onChange={event => this.onValueChange(i, event)}/></td>
                     <td><button className="button-error" onClick={event => this.deleteRow(i)}>Delete</button></td>
                   </tr>
                 );

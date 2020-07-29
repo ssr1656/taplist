@@ -28,6 +28,35 @@
   display: flex;
   flex-flow: column;
   justify-content: center;
+  position: relative;
+  .glasses {
+    display: flex;
+    padding-bottom: 5px;
+    align-items: flex-end;
+    justify-content: flex-end;
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    svg {
+      width: 30px;
+      cursor: pointer;
+    }
+    div:nth-child(1) {
+      svg {
+        height: 25px;
+      }
+    }
+    div:nth-child(2) {
+      svg {
+        height: 35px;
+      }
+    }
+    div:nth-child(3) {
+      svg {
+        height: 45px;
+      }
+    }
+  }
 }
 
 .tap-no {
@@ -87,7 +116,7 @@
     
   }
   .hop-icon, .glass-icon, .keg-icon {
-    height: 60%;
+    height: 40%;
     padding: 3px;
     svg {
       height: 100%;
@@ -96,6 +125,7 @@
   }
   .keg-icon {
     cursor: pointer;
+    height: 40%
   }
   .tap-no {
     font-size: 32px;
@@ -127,5 +157,8 @@
   .beer-desc {
     text-align: start;
     padding-top: 5px;
+    &.short {
+      width: 80%;
+    }
   }
 }
