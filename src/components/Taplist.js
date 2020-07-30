@@ -40,16 +40,15 @@ export default class Taplist extends Component {
     const localData = JSON.parse(localStorage.getItem("finalData"))
     // make sure servingSize_s & servingSize_l are part of existing data
     const taplist = this.state.data.tapList[0]
-    localData.tapList.forEach(element => {
-      if(!element.servingSize_s) {
-        element.servingSize_s = taplist.servingSize_s
-      }
-      if(!element.servingSize_l) {
-        element.servingSize_l = taplist.servingSize_l
-      }
-    });
-
     if(localData) {
+      localData.tapList.forEach(element => {
+        if(!element.servingSize_s) {
+          element.servingSize_s = taplist.servingSize_s
+        }
+        if(!element.servingSize_l) {
+          element.servingSize_l = taplist.servingSize_l
+        }
+      });
       this.setState({data: localData}, () => {
         localStorage.setItem('finalData', JSON.stringify(this.state.data));
       })
