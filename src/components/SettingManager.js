@@ -7,6 +7,8 @@ export default class SettingManager extends Component {
     super(props)
     this.state = {
       defaultListValues: {
+        isBottled: false,
+        bottles: 12,
         gravity: 1.066,
         color: 38,
         balance: 1.00,
@@ -78,10 +80,13 @@ export default class SettingManager extends Component {
   onValueChange(i, event) {
     let existingState = this.state.finalData;
     const targetValue = event.target.value;
-    if(targetValue === "" || isNaN(targetValue)) {
-      existingState.tapList[i][event.target.name] = event.target.value
+    const targetName = event.target.name;
+    if(targetName === 'isBottle'){
+      existingState.tapList[i][targetName] = !existingState.tapList[i][targetName]
+    } else if(targetValue === "" || isNaN(targetValue)) {
+      existingState.tapList[i][targetName] = event.target.value
     } else {
-      existingState.tapList[i][event.target.name] = Number(event.target.value)
+      existingState.tapList[i][targetName] = Number(event.target.value)
     }
     this.setState({finalData: existingState})
   }
@@ -178,18 +183,18 @@ export default class SettingManager extends Component {
               <br/>
               <label>Display Poured/Remaining column:</label>
               <input
-                  name="displayPourColumn"
-                  type="checkbox"
-                  checked={displayPourColumn}
-                  onChange={this.handleInputChange} />
+                name="displayPourColumn"
+                type="checkbox"
+                checked={displayPourColumn}
+                onChange={this.handleInputChange} />
               <br/>
               <label>Display serving glasses:</label>
               <input
-                  name="displayServingGlasses"
-                  type="checkbox"
-                  checked={displayServingGlasses}
-                  onChange={this.handleInputChange} 
-                  disabled={!displayPourColumn}/>
+                name="displayServingGlasses"
+                type="checkbox"
+                checked={displayServingGlasses}
+                onChange={this.handleInputChange} 
+                disabled={!displayPourColumn}/>
             </div>
             
 
@@ -242,6 +247,7 @@ export default class SettingManager extends Component {
           <table>
             <tbody>
               <tr>
+                <th>Is Bottled</th>
                 <th>Gravity (OG)</th>
                 <th>Color (SRM)</th>
                 <th>Balance (BU:GU)</th>
@@ -251,6 +257,7 @@ export default class SettingManager extends Component {
                 <th>Notes</th>
                 <th>Calories (kCal)</th>
                 <th>Alcohol (ABV)</th>
+                <th>Bottle count</th>
                 <th>Poured (oz)</th>
                 <th>Quantity (oz)</th>
                 <th>Small serve (oz)</th>
@@ -261,6 +268,7 @@ export default class SettingManager extends Component {
               {tapList.map((item, i) => {
                 return (
                   <tr key={item.randomNum}>
+                    <td><input name="isBottled" type="checkbox" checked={item.isBottled} onChange={event => this.onValueChange(i, event)} /></td>
                     <td><input type="number" name="gravity" value={item.gravity} onChange={event => this.onValueChange(i, event)}/></td>
                     <td><input type="number" name="color" value={item.color} onChange={event => this.onValueChange(i, event)}/></td>
                     <td><input type="number" name="balance" value={item.balance} onChange={event => this.onValueChange(i, event)}/></td>
@@ -270,11 +278,12 @@ export default class SettingManager extends Component {
                     <td><textarea name="notes" defaultValue={item.notes} onChange={event => this.onValueChange(i, event)}/></td>
                     <td><input type="number" name="calories" value={item.calories} onChange={event => this.onValueChange(i, event)}/></td>
                     <td><input type="number" name="alcohol" value={item.alcohol} onChange={event => this.onValueChange(i, event)}/></td>
-                    <td><input type="number" disabled={!displayPourColumn} name="poured" value={item.poured} onChange={event => this.onValueChange(i, event)}/></td>
-                    <td><input type="number" disabled={!displayPourColumn} name="quantity" value={item.quantity} onChange={event => this.onValueChange(i, event)}/></td>
-                    <td><input type="number" disabled={!displayPourColumn || !displayServingGlasses} name="servingSize_s" value={item.servingSize_s} onChange={event => this.onValueChange(i, event)}/></td>
-                    <td><input type="number" disabled={!displayPourColumn} name="servingSize" value={item.servingSize} onChange={event => this.onValueChange(i, event)}/></td>
-                    <td><input type="number" disabled={!displayPourColumn || !displayServingGlasses} name="servingSize_l" value={item.servingSize_l} onChange={event => this.onValueChange(i, event)}/></td>
+                    <td><input type="number" disabled={!item.isBottled} name="bottles" value={item.bottles} onChange={event => this.onValueChange(i, event)}/></td>
+                    <td><input type="number" disabled={!displayPourColumn || item.isBottled} name="poured" value={item.poured} onChange={event => this.onValueChange(i, event)}/></td>
+                    <td><input type="number" disabled={!displayPourColumn || item.isBottled} name="quantity" value={item.quantity} onChange={event => this.onValueChange(i, event)}/></td>
+                    <td><input type="number" disabled={!displayPourColumn || !displayServingGlasses || item.isBottled} name="servingSize_s" value={item.servingSize_s} onChange={event => this.onValueChange(i, event)}/></td>
+                    <td><input type="number" disabled={!displayPourColumn || item.isBottled} name="servingSize" value={item.servingSize} onChange={event => this.onValueChange(i, event)}/></td>
+                    <td><input type="number" disabled={!displayPourColumn || !displayServingGlasses || item.isBottled} name="servingSize_l" value={item.servingSize_l} onChange={event => this.onValueChange(i, event)}/></td>
                     <td><button className="button-error" onClick={event => this.deleteRow(i)}>Delete</button></td>
                   </tr>
                 );

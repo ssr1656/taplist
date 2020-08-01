@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { HopIcon, GlassIcon, KegIcon } from '../assets/icons'
+import { HopIcon, GlassIcon, KegIcon, BottleIcon } from '../assets/icons'
 import './Taplist.scss';
 
 export default class Taplist extends Component {
@@ -28,7 +28,9 @@ export default class Taplist extends Component {
                 quantity: 526,
                 servingSize_s: 12,
                 servingSize: 16,
-                servingSize_l: 21
+                servingSize_l: 21,
+                bottles: 12,
+                isBottled: false
             }
         ]
       }
@@ -38,15 +40,25 @@ export default class Taplist extends Component {
 
   componentDidMount() {
     const localData = JSON.parse(localStorage.getItem("finalData"))
-    // make sure servingSize_s & servingSize_l are part of existing data
+    // v1.1 update
+    // make sure the new values are part of existing data    
     const taplist = this.state.data.tapList[0]
     if(localData) {
+      if (localData.displayServingGlasses === undefined){
+        localData.displayServingGlasses = false 
+      }
       localData.tapList.forEach(element => {
         if(!element.servingSize_s) {
           element.servingSize_s = taplist.servingSize_s
         }
         if(!element.servingSize_l) {
           element.servingSize_l = taplist.servingSize_l
+        }
+        if(!element.bottles) {
+          element.bottles = taplist.bottles
+        }
+        if(!element.isBottled) {
+          element.isBottled = taplist.isBottled
         }
       });
       this.setState({data: localData}, () => {
@@ -63,6 +75,18 @@ export default class Taplist extends Component {
     let tapItem = {...tapList[index]};
     tapItem.poured = Number(tapItem.poured) + Number(tapItem[itemClicked]);
     tapItem.quantity = Number(tapItem.quantity) -  Number(tapItem[itemClicked]);
+    tapList[index] = tapItem
+    data.tapList = tapList
+    this.setState({data: data}, () => {
+      localStorage.setItem('finalData', JSON.stringify(this.state.data));
+    }) 
+  }
+
+  onBottleClick(index, event) {
+    const data = {...this.state.data};
+    let tapList = [...data.tapList];
+    let tapItem = {...tapList[index]};
+    tapItem.bottles -= 1;
     tapList[index] = tapItem
     data.tapList = tapList
     this.setState({data: data}, () => {
@@ -155,7 +179,7 @@ export default class Taplist extends Component {
                 <div className={"beer-desc " + (displayServingGlasses ? 'short' : 'full')}>
                   {item.notes}
                 </div>
-                {displayServingGlasses && <div className="glasses" >
+                {displayServingGlasses && !item.isBottled && <div className="glasses" >
                   <div className='servingSize_s' onClick={event => this.onKegClick(i, event)}>
                     <GlassIcon srm={5}/>
                   </div>
@@ -176,7 +200,7 @@ export default class Taplist extends Component {
                   {item.alcohol}% ABV
                 </div>
               </div>
-              {displayPourColumn && <div className="poured-remaining row-item">
+              {displayPourColumn && !item.isBottled && <div className="poured-remaining row-item">
                 <div className="beer-poured">
                   {item.poured} fl oz poured
                 </div>
@@ -185,6 +209,14 @@ export default class Taplist extends Component {
                 </div>
                 <div className="beer-remaining">
                 {item.quantity} fl oz remaining
+                </div>
+              </div>}
+              {displayPourColumn && item.isBottled && <div className="poured-remaining row-item">
+                <div className="bottle-icon" onClick={event => this.onBottleClick(i, event)}>
+                <BottleIcon srm={item.color}/>
+                </div>
+                <div className="beer-remaining">
+                {item.bottles} remaining
                 </div>
               </div>}
               

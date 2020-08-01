@@ -115,7 +115,7 @@
     }
     
   }
-  .hop-icon, .glass-icon, .keg-icon {
+  .hop-icon, .glass-icon, .keg-icon, .bottle-icon {
     height: 40%;
     padding: 3px;
     svg {
@@ -123,7 +123,7 @@
       width: 10vh;
     }
   }
-  .keg-icon {
+  .keg-icon, .bottle-icon {
     cursor: pointer;
     height: 40%
   }
