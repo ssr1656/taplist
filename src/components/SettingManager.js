@@ -148,9 +148,9 @@ export default class SettingManager extends Component {
         <div className="breadcrums">
           <ol className="breadcrumb ">
             <li>
-              <a href="/#" onClick={this.props.switchView}>
+              <button className='back-button' href='' onClick={this.props.switchView}>
                 <span>Back to Taplist</span>
-              </a>
+              </button>
             </li>
             <li>
               <a href="/#"> 
