@@ -17,9 +17,7 @@ margin: 0;
   flex-flow: column;
   height: 100%;
   header {
-    flex: 0 1 auto;
     height: 70px;
-    display: flex;
     flex-flow: row wrap;
     justify-content: space-between;
     margin: 5px;
@@ -27,6 +25,13 @@ margin: 0;
       font-family: 'FrederickatheGreat';
       text-align: center;
       width: 100%
+    }
+    .second-logo {
+      position: absolute;
+      top: 30px;
+      right: 10px;
+      color: orange;
+      font-size: 20px;
     }
   }
   footer {

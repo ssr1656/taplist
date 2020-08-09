@@ -80,6 +80,7 @@ export default class Taplist extends Component {
     this.setState({data: data}, () => {
       localStorage.setItem('finalData', JSON.stringify(this.state.data));
     }) 
+    this.props.resetTimer();
   }
 
   onBottleClick(index, event) {
@@ -92,6 +93,7 @@ export default class Taplist extends Component {
     this.setState({data: data}, () => {
       localStorage.setItem('finalData', JSON.stringify(this.state.data));
     }) 
+    this.props.resetTimer();
   }
 
 
