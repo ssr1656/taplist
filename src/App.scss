@@ -29,46 +29,11 @@ margin: 0;
       width: 100%
     }
   }
+  main {
+    height: calc(100% - 70px);
+  }
   footer {
     flex: 0 1 auto;
-  }
-  main {
-    flex: 1 1 auto;
-    margin: 0 10px 0 10px;
-    display: flex;
-    flex-flow: column nowrap;
-
-    .tap-item {
-      // background-color: #2f3035;
-      height: 100%
-    }
-    
-    .tap-item:nth-child(odd){
-      background-color: #424348;
-      background: rgba(66, 67, 72, 0.4);
-    }
-
-    .ibu-container{
-      position: relative;
-      height:100px;
-      width:53px;
-      margin: 0 auto;
-    }
-    // .ibu-indicator{
-    //   position: absolute;
-    //   bottom: 0;
-    //   left: 0;
-    //   height: 100%;
-    //   width: 100%;
-    //   background: url(./assets/img/ibu/stroke.png) no-repeat bottom left;
-    // }
-    // .ibu-indicator .ibu-full{
-    //   position: absolute;
-    //   bottom: 0;
-    //   left: 0;
-    //   width: 100%;
-    //   background: url(./assets/img/ibu/full.png) no-repeat bottom left;
-    // }
   }
 }
 

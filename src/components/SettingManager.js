@@ -29,6 +29,7 @@ export default class SettingManager extends Component {
         displayTitleBar: true,
         displayPourColumn: true,
         displayServingGlasses: false,
+        display2Columns: false,
         pageTitle: "My Taplist",
         titleFontSize: 50,
         headerFontSize: 14,
@@ -65,7 +66,7 @@ export default class SettingManager extends Component {
   handleInputChange(event) {
     let existingState = this.state.finalData
     const targetName = event.target.name;
-    if(targetName === "displayTitleBar" || targetName === "displayPourColumn" || targetName === "displayServingGlasses") {
+    if(targetName === "displayTitleBar" || targetName === "displayPourColumn" || targetName === "displayServingGlasses" || targetName === "display2Columns") {
       existingState[targetName] = !existingState[targetName];
     } else {
       if(targetName === "pageTitle") {
@@ -141,7 +142,8 @@ export default class SettingManager extends Component {
       beerNameFontSize,
       beerDescriptionFontSize,
       beerStyleFontSize,
-      displayServingGlasses
+      displayServingGlasses,
+      display2Columns
     } = this.state.finalData
     return (
       <div className="manager">
@@ -193,6 +195,14 @@ export default class SettingManager extends Component {
                 name="displayServingGlasses"
                 type="checkbox"
                 checked={displayServingGlasses}
+                onChange={this.handleInputChange} 
+                disabled={!displayPourColumn}/>
+              <br/>
+              <label>Display 2 columns:</label>
+              <input
+                name="display2Columns"
+                type="checkbox"
+                checked={display2Columns}
                 onChange={this.handleInputChange} 
                 disabled={!displayPourColumn}/>
             </div>

@@ -1,167 +1,212 @@
-.list-header {
-  font-size: 14px;
-  display: flex;
-  flex-flow: row nowrap;
-  text-align: center;
-  border: 1px solid #3e3e3e;
-  font-family: 'FrederickatheGreat';
-  cursor: pointer;
-  .header-item {
-    &:not(:last-child) {
-      border-right: 1px dotted white;
+.container {
+  height: 100%;
+
+  .header-container {
+    flex: 1 1 auto;
+    margin: 0 1px 0 1px;
+    display: flex;
+    flex-flow: column nowrap;
+    &.two-column {
+      flex-flow: row wrap;
+      justify-content: space-between;
+    }
+  }
+  .list-container   {
+    flex: 1 1 auto;
+    margin: 0 1px 0 1px;
+    display: flex;
+    flex-flow: column nowrap;
+    height: 94%;
+    &.two-column {
+      flex-flow: row wrap;
+      justify-content: space-between;
+    }
+  }
+
+  
+  .list-header {
+    font-size: 14px;
+    display: flex;
+    flex-flow: row nowrap;
+    text-align: center;
+    border: 1px solid #3e3e3e;
+    font-family: 'FrederickatheGreat';
+    max-height: 60px;
+    cursor: pointer;
+    &.two-column {
+      width: 49.6%;
+    }
+    &.two-column:nth-child(odd) {
+      border-right: 2px solid white;
+    }
+    .header-item {
+      &:not(:last-child) {
+        border-right: 1px dotted white;
+      }
+    }
+    
+    .header-item {
+      &:not(:first-child) {
+        div:nth-child(2) {
+          border-top: 1px solid orange;
+        }
+      }
+    }
+  }
+  .header-item, .row-item {
+    padding: 0 5px 0 5px;
+  }
+  
+  .gravity-color, .balance-bitterness, .beer-details, .calories-alcohol, .tap-no, .poured-remaining {
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    position: relative;
+    .glasses {
+      display: flex;
+      padding-bottom: 5px;
+      align-items: flex-end;
+      justify-content: flex-end;
+      position: absolute;
+      bottom: 0px;
+      right: 0px;
+      .servingSize_s, .servingSize {
+        padding-right: 15px;
+      }
+      svg {
+        width: 30px;
+        cursor: pointer;
+      }
+      div:nth-child(1) {
+        svg {
+          height: 25px;
+        }
+      }
+      div:nth-child(2) {
+        svg {
+          height: 35px;
+        }
+      }
+      div:nth-child(3) {
+        svg {
+          height: 45px;
+        }
+      }
     }
   }
   
-  .header-item {
-    &:not(:first-child) {
-      div:nth-child(2) {
-        border-top: 1px solid orange;
-      }
-    }
-  }
-}
-.header-item, .row-item {
-  padding: 0 5px 0 5px;
-}
-
-.gravity-color, .balance-bitterness, .beer-details, .calories-alcohol, .tap-no, .poured-remaining {
-  display: flex;
-  flex-flow: column;
-  justify-content: center;
-  position: relative;
-  .glasses {
-    display: flex;
-    padding-bottom: 5px;
-    align-items: flex-end;
-    justify-content: flex-end;
-    position: absolute;
-    bottom: 0px;
-    right: 0px;
-    .servingSize_s, .servingSize {
-      padding-right: 15px;
-    }
-    svg {
-      width: 30px;
-      cursor: pointer;
-    }
-    div:nth-child(1) {
-      svg {
-        height: 25px;
-      }
-    }
-    div:nth-child(2) {
-      svg {
-        height: 35px;
-      }
-    }
-    div:nth-child(3) {
-      svg {
-        height: 45px;
-      }
-    }
-  }
-}
-
-.tap-no {
-  width: 6%;
-}
-.gravity-color, .balance-bitterness, .calories-alcohol {
-  width: 11%;
-}
-
-.beer-details {
-  width: 61%;
-}
-
-.pour-column {
   .tap-no {
-    width: 5%;
+    width: 6%;
   }
-  .gravity-color, .balance-bitterness, .calories-alcohol{
-    width: 9%;
+  .gravity-color, .balance-bitterness, .calories-alcohol {
+    width: 11%;
   }
-  .poured-remaining {
-    width: 13%;
-  }
-
+  
   .beer-details {
-    width: 55%;
+    width: 61%;
   }
-}
-
-
-// .normal.poured-alcohol {
-//   width: 11%;
-//   display: flex;
-//   flex-flow: column;
-//   justify-content: center;
-// }
-
-
-.tap-row {
-  display: flex;
-  flex-flow: row nowrap;
-  font-size: 14px;
-  font-weight: bold;
-  height: 100%;
-  text-align: center;
-  border: 1px solid #3e3e3e;
-  color: #b7b5b5;
-  .row-item {
-    &:not(:last-child) {
-      border-right: 1px dotted white;
+  
+  .pour-column {
+    .tap-no {
+      width: 5%;
     }
-    &.beer-details {
-      display: flex;
-      flex-flow: column;
-      justify-content: space-evenly;
+    .gravity-color, .balance-bitterness, .calories-alcohol{
+      width: 9%;
     }
-    
-  }
-  .hop-icon, .glass-icon, .keg-icon, .bottle-icon {
-    height: 40%;
-    padding: 3px;
-    svg {
-      height: 100%;
-      width: 10vh;
+    .poured-remaining {
+      width: 13%;
+    }
+  
+    .beer-details {
+      width: 55%;
     }
   }
-  .keg-icon, .bottle-icon {
-    cursor: pointer;
-    height: 40%
-  }
-  .tap-no {
-    font-size: 32px;
-    color: white;
-    .hello {
-      display: flex;
-      flex-flow: column;
-      justify-content: center;
-      width: 25px;
-      height: 25px;
-      border-radius: 50%;
-      // font-size: 50px;
-      color: #fff;
-      line-height: 25px;
-      text-align: center;
-      background: orange;
-    }
-  }
-  .beer-name {
-    font-size: 18px;
-    text-align: left;
+  
+  
+  // .normal.poured-alcohol {
+  //   width: 11%;
+  //   display: flex;
+  //   flex-flow: column;
+  //   justify-content: center;
+  // }
+  
+  
+  .tap-row {
+    display: flex;
+    flex-flow: row nowrap;
+    font-size: 14px;
     font-weight: bold;
-    color: white;
-  }
-  .beer-style {
-    text-align: left;
-    color: orange;
-  }
-  .beer-desc {
-    text-align: start;
-    padding-top: 5px;
-    &.short {
-      width: 73%;
+    height: 100%;
+    text-align: center;
+    border: 1px solid #3e3e3e;
+    color: #b7b5b5;
+    flex: 1;
+    min-height: 0;
+    &.two-column {
+      width: 49.6%;
+      height: auto;
+      // min-height: auto;
+      flex: none;
+    }
+    &.two-column:nth-child(odd) {
+      border-right: 2px solid white;
+    }
+    .row-item {
+      &:not(:last-child) {
+        border-right: 1px dotted white;
+      }
+      &.beer-details {
+        display: flex;
+        flex-flow: column;
+        justify-content: space-evenly;
+      }
+      
+    }
+    .hop-icon, .glass-icon, .keg-icon, .bottle-icon {
+      height: 40%;
+      padding: 3px;
+      svg {
+        height: 100%;
+        width: 100%;
+      }
+    }
+    .keg-icon, .bottle-icon {
+      cursor: pointer;
+      height: 40%
+    }
+    .tap-no {
+      font-size: 32px;
+      color: white;
+      .hello {
+        display: flex;
+        flex-flow: column;
+        justify-content: center;
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        // font-size: 50px;
+        color: #fff;
+        line-height: 25px;
+        text-align: center;
+        background: orange;
+      }
+    }
+    .beer-name {
+      font-size: 18px;
+      text-align: left;
+      font-weight: bold;
+      color: white;
+    }
+    .beer-style {
+      text-align: left;
+      color: orange;
+    }
+    .beer-desc {
+      text-align: start;
+      padding-top: 5px;
+      &.short {
+        width: 73%;
+      }
     }
   }
 }
