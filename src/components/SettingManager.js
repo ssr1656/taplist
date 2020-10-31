@@ -28,6 +28,7 @@ export default class SettingManager extends Component {
       finalData: {
         displayTitleBar: true,
         displayPourColumn: true,
+        displayCalorieAlcoholColumn: true,
         displayServingGlasses: false,
         display2Columns: false,
         pageTitle: "My Taplist",
@@ -35,8 +36,9 @@ export default class SettingManager extends Component {
         headerFontSize: 14,
         beerNameFontSize: 18,
         beerStyleFontSize: 14,
-        beerDescriptionFontSize: 12
-
+        beerDescriptionFontSize: 12,
+        measurementUnit: 'oz',
+        gravityUnit: 'og'
       }
     }
     this.onValueChange = this.onValueChange.bind(this);
@@ -46,6 +48,8 @@ export default class SettingManager extends Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.deleteRow = this.deleteRow.bind(this);
     this.resetAll = this.resetAll.bind(this);
+    this.measurementChange = this.measurementChange.bind(this);
+    this.gravityUnitChange = this.gravityUnitChange.bind(this);
     this.list = {
 
     }
@@ -56,40 +60,54 @@ export default class SettingManager extends Component {
 
   componentDidMount() {
     const localData = JSON.parse(localStorage.getItem("finalData"))
-    if(localData) {
-      this.setState({finalData: localData});
+    if (localData) {
+      this.setState({ finalData: localData });
     } else {
-      this.setState({finalData: {...this.state.finalData, tapList:[this.state.defaultListValues]}})
+      this.setState({ finalData: { ...this.state.finalData, tapList: [this.state.defaultListValues] } })
     }
   }
 
   handleInputChange(event) {
     let existingState = this.state.finalData
     const targetName = event.target.name;
-    if(targetName === "displayTitleBar" || targetName === "displayPourColumn" || targetName === "displayServingGlasses" || targetName === "display2Columns") {
+    if (targetName === "displayTitleBar"
+      || targetName === "displayPourColumn"
+      || targetName === "displayServingGlasses"
+      || targetName === "display2Columns"
+      || targetName === "displayCalorieAlcoholColumn") {
       existingState[targetName] = !existingState[targetName];
     } else {
-      if(targetName === "pageTitle") {
+      if (targetName === "pageTitle") {
         existingState[targetName] = event.target.value;
-      }else {
+      } else {
         existingState[targetName] = Number(event.target.value);
       }
     }
-    this.setState({finalData: existingState});
+    this.setState({ finalData: existingState });
   }
 
   onValueChange(i, event) {
     let existingState = this.state.finalData;
     const targetValue = event.target.value;
     const targetName = event.target.name;
-    if(targetName === 'isBottle'){
+    if (targetName === 'isBottled') {
       existingState.tapList[i][targetName] = !existingState.tapList[i][targetName]
-    } else if(targetValue === "" || isNaN(targetValue)) {
+    } else if (targetValue === "" || isNaN(targetValue)) {
       existingState.tapList[i][targetName] = event.target.value
     } else {
       existingState.tapList[i][targetName] = Number(event.target.value)
     }
-    this.setState({finalData: existingState})
+    this.setState({ finalData: existingState })
+  }
+
+  measurementChange(event){
+    let existingState = this.state.finalData
+    this.setState({ finalData: {...existingState, measurementUnit:  event.target.value}})
+  }
+
+  gravityUnitChange(event){
+    let existingState = this.state.finalData
+    this.setState({ finalData: {...existingState, gravityUnit:  event.target.value}})
   }
 
   onSave() {
@@ -103,8 +121,8 @@ export default class SettingManager extends Component {
 
   addRow() {
     let existingState = this.state.finalData
-    existingState.tapList.push({...this.state.defaultListValues, randomNum: this.getRandomNumer()})
-    this.setState({finalData: existingState});
+    existingState.tapList.push({ ...this.state.defaultListValues, randomNum: this.getRandomNumer() })
+    this.setState({ finalData: existingState });
   }
 
   getRandomNumer() {
@@ -112,11 +130,11 @@ export default class SettingManager extends Component {
   }
 
   deleteRow(index) {
-    let existingState = {...this.state.finalData}
+    let existingState = { ...this.state.finalData }
     let tapList = [...existingState.tapList]
     tapList.splice(index, 1);
     existingState.tapList = tapList
-    this.setState({finalData: existingState});
+    this.setState({ finalData: existingState });
   }
 
   toggleFullscreen() {
@@ -126,7 +144,7 @@ export default class SettingManager extends Component {
   }
 
   resetAll() {
-    this.setState({finalData: {...this.state.finalData, tapList:[this.state.defaultListValues]}});
+    this.setState({ finalData: { ...this.state.finalData, tapList: [this.state.defaultListValues] } });
     localStorage.removeItem('finalData');
   }
 
@@ -134,8 +152,8 @@ export default class SettingManager extends Component {
   render() {
     const tapList = this.state.finalData.tapList || []
     const {
-      displayPourColumn, 
-      displayTitleBar, 
+      displayPourColumn,
+      displayTitleBar,
       pageTitle,
       titleFontSize,
       headerFontSize,
@@ -143,7 +161,10 @@ export default class SettingManager extends Component {
       beerDescriptionFontSize,
       beerStyleFontSize,
       displayServingGlasses,
-      display2Columns
+      display2Columns,
+      displayCalorieAlcoholColumn,
+      measurementUnit,
+      gravityUnit
     } = this.state.finalData
     return (
       <div className="manager">
@@ -155,7 +176,7 @@ export default class SettingManager extends Component {
               </button>
             </li>
             <li>
-              <a href="/#"> 
+              <a href="/#">
                 <span>Settings</span>
               </a>
             </li>
@@ -163,9 +184,9 @@ export default class SettingManager extends Component {
         </div>
 
         <div className="top-settings">
-        <div className="full-screen">
-              <button className="add-row button-secondary" onClick={this.toggleFullscreen}>Make app full screen</button>
-            </div>
+          <div className="full-screen">
+            <button className="add-row button-secondary" onClick={this.toggleFullscreen}>Make app full screen</button>
+          </div>
           <form>
             <div className="misc-settings">
               <label>Display title bar:</label>
@@ -174,39 +195,59 @@ export default class SettingManager extends Component {
                 type="checkbox"
                 checked={displayTitleBar}
                 onChange={this.handleInputChange} />
-              <br/>
+              <br />
               <label>Page title:</label>
               <input
                 name="pageTitle"
                 type="text"
                 value={pageTitle}
-                onChange={this.handleInputChange} 
-                disabled={!displayTitleBar}/>
-              <br/>
+                onChange={this.handleInputChange}
+                disabled={!displayTitleBar} />
+              <br />
+              <label>Display Calories/Alcohol column:</label>
+              <input
+                name="displayCalorieAlcoholColumn"
+                type="checkbox"
+                checked={displayCalorieAlcoholColumn}
+                onChange={this.handleInputChange} />
+              <br />
               <label>Display Poured/Remaining column:</label>
               <input
                 name="displayPourColumn"
                 type="checkbox"
                 checked={displayPourColumn}
                 onChange={this.handleInputChange} />
-              <br/>
+              <br />
               <label>Display serving glasses:</label>
               <input
                 name="displayServingGlasses"
                 type="checkbox"
                 checked={displayServingGlasses}
-                onChange={this.handleInputChange} 
-                disabled={!displayPourColumn}/>
-              <br/>
+                onChange={this.handleInputChange}
+                disabled={!displayPourColumn} />
+              <br />
               <label>Display 2 columns:</label>
               <input
                 name="display2Columns"
                 type="checkbox"
                 checked={display2Columns}
-                onChange={this.handleInputChange} 
-                disabled={!displayPourColumn}/>
+                onChange={this.handleInputChange} />
+              <br/>
+              <label>Measuring Unit:</label>
+              <select value={measurementUnit} onChange={this.measurementChange}>
+                <option value="oz">fl oz</option>
+                <option value="ml">ml</option>
+                <option value="dl">dl</option>
+                <option value="glass">glass</option>
+              </select>
+              <br/>
+              <label>Gravity Unit:</label>
+              <select value={gravityUnit} onChange={this.gravityUnitChange}>
+                <option value="og">OG</option>
+                <option value="brix">Brix</option>
+              </select>
             </div>
-            
+
 
             <fieldset className="font-settings">
               <legend>Set font size:</legend>
@@ -216,49 +257,49 @@ export default class SettingManager extends Component {
                 type="number"
                 value={titleFontSize}
                 onChange={this.handleInputChange} />
-              <br/>
+              <br />
               <label>List Header Text:</label>
               <input
                 name="headerFontSize"
                 type="number"
                 value={headerFontSize}
-                onChange={this.handleInputChange} 
+                onChange={this.handleInputChange}
               />
-              <br/>
+              <br />
               <label>Beer Name:</label>
               <input
                 name="beerNameFontSize"
                 type="number"
                 value={beerNameFontSize}
-                onChange={this.handleInputChange} 
+                onChange={this.handleInputChange}
               />
-              <br/>
+              <br />
               <label>Beer Style:</label>
               <input
                 name="beerStyleFontSize"
                 type="number"
                 value={beerStyleFontSize}
-                onChange={this.handleInputChange} 
+                onChange={this.handleInputChange}
               />
-              <br/>
+              <br />
               <label>Beer Description:</label>
               <input
                 name="beerDescriptionFontSize"
                 type="number"
                 value={beerDescriptionFontSize}
-                onChange={this.handleInputChange} 
+                onChange={this.handleInputChange}
               />
-              </fieldset>
+            </fieldset>
           </form>
         </div>
-        
+
         <div className="table-container">
           <button className="add-row button-secondary" onClick={this.addRow}>+Add Row</button>
           <table>
             <tbody>
               <tr>
                 <th>Is Bottled</th>
-                <th>Gravity (OG)</th>
+                <th>Gravity ({gravityUnit})</th>
                 <th>Color (SRM)</th>
                 <th>Balance (BU:GU)</th>
                 <th>Bitterness (IBU)</th>
@@ -268,44 +309,44 @@ export default class SettingManager extends Component {
                 <th>Calories (kCal)</th>
                 <th>Alcohol (ABV)</th>
                 <th>Bottle count</th>
-                <th>Poured (oz)</th>
-                <th>Quantity (oz)</th>
-                <th>Small serve (oz)</th>
-                <th>Medium serve (oz)</th>
-                <th>Large serve (oz)</th>
+                <th>Poured ({measurementUnit})</th>
+                <th>Quantity ({measurementUnit})</th>
+                <th>Small serve ({measurementUnit})</th>
+                <th>Medium serve ({measurementUnit})</th>
+                <th>Large serve ({measurementUnit})</th>
                 <th>Delete row</th>
               </tr>
               {tapList.map((item, i) => {
                 return (
                   <tr key={item.randomNum}>
                     <td><input name="isBottled" type="checkbox" checked={item.isBottled} onChange={event => this.onValueChange(i, event)} /></td>
-                    <td><input type="number" name="gravity" value={item.gravity} onChange={event => this.onValueChange(i, event)}/></td>
-                    <td><input type="number" name="color" value={item.color} onChange={event => this.onValueChange(i, event)}/></td>
-                    <td><input type="number" name="balance" value={item.balance} onChange={event => this.onValueChange(i, event)}/></td>
-                    <td><input type="number" name="bitterness" value={item.bitterness} onChange={event => this.onValueChange(i, event)}/></td>
+                    <td><input type="number" name="gravity" value={item.gravity} onChange={event => this.onValueChange(i, event)} /></td>
+                    <td><input type="number" name="color" value={item.color} onChange={event => this.onValueChange(i, event)} /></td>
+                    <td><input type="number" name="balance" value={item.balance} onChange={event => this.onValueChange(i, event)} /></td>
+                    <td><input type="number" name="bitterness" value={item.bitterness} onChange={event => this.onValueChange(i, event)} /></td>
                     <td><input type="text" name="name" className="big-input" value={item.name} onChange={event => this.onValueChange(i, event)} /></td>
-                    <td><input type="text" name="style" className="big-input" value={item.style} onChange={event => this.onValueChange(i, event)}/></td>
-                    <td><textarea name="notes" defaultValue={item.notes} onChange={event => this.onValueChange(i, event)}/></td>
-                    <td><input type="number" name="calories" value={item.calories} onChange={event => this.onValueChange(i, event)}/></td>
-                    <td><input type="number" name="alcohol" value={item.alcohol} onChange={event => this.onValueChange(i, event)}/></td>
-                    <td><input type="number" disabled={!item.isBottled} name="bottles" value={item.bottles} onChange={event => this.onValueChange(i, event)}/></td>
-                    <td><input type="number" disabled={!displayPourColumn || item.isBottled} name="poured" value={item.poured} onChange={event => this.onValueChange(i, event)}/></td>
-                    <td><input type="number" disabled={!displayPourColumn || item.isBottled} name="quantity" value={item.quantity} onChange={event => this.onValueChange(i, event)}/></td>
-                    <td><input type="number" disabled={!displayPourColumn || !displayServingGlasses || item.isBottled} name="servingSize_s" value={item.servingSize_s} onChange={event => this.onValueChange(i, event)}/></td>
-                    <td><input type="number" disabled={!displayPourColumn || item.isBottled} name="servingSize" value={item.servingSize} onChange={event => this.onValueChange(i, event)}/></td>
-                    <td><input type="number" disabled={!displayPourColumn || !displayServingGlasses || item.isBottled} name="servingSize_l" value={item.servingSize_l} onChange={event => this.onValueChange(i, event)}/></td>
+                    <td><input type="text" name="style" className="big-input" value={item.style} onChange={event => this.onValueChange(i, event)} /></td>
+                    <td><textarea name="notes" defaultValue={item.notes} onChange={event => this.onValueChange(i, event)} /></td>
+                    <td><input type="number" disabled={!displayCalorieAlcoholColumn} name="calories" value={item.calories} onChange={event => this.onValueChange(i, event)} /></td>
+                    <td><input type="number" disabled={!displayCalorieAlcoholColumn}  name="alcohol" value={item.alcohol} onChange={event => this.onValueChange(i, event)} /></td>
+                    <td><input type="number" disabled={!item.isBottled} name="bottles" value={item.bottles} onChange={event => this.onValueChange(i, event)} /></td>
+                    <td><input type="number" disabled={!displayPourColumn || item.isBottled} name="poured" value={item.poured} onChange={event => this.onValueChange(i, event)} /></td>
+                    <td><input type="number" disabled={!displayPourColumn || item.isBottled} name="quantity" value={item.quantity} onChange={event => this.onValueChange(i, event)} /></td>
+                    <td><input type="number" disabled={!displayPourColumn || !displayServingGlasses || item.isBottled} name="servingSize_s" value={item.servingSize_s} onChange={event => this.onValueChange(i, event)} /></td>
+                    <td><input type="number" disabled={!displayPourColumn || item.isBottled} name="servingSize" value={item.servingSize} onChange={event => this.onValueChange(i, event)} /></td>
+                    <td><input type="number" disabled={!displayPourColumn || !displayServingGlasses || item.isBottled} name="servingSize_l" value={item.servingSize_l} onChange={event => this.onValueChange(i, event)} /></td>
                     <td><button className="button-error" onClick={event => this.deleteRow(i)}>Delete</button></td>
                   </tr>
                 );
               })}
-              </tbody>
+            </tbody>
           </table>
           <button className="btn-reset button-error" onClick={this.resetAll}>Reset All</button>
           <div className="btn-submit">
             <button className="btn-cancel button-warning" onClick={this.onCancel}>Cancel</button>
             <button className="button-success" onClick={this.onSave}>Save</button>
           </div>
-          
+
         </div>
       </div>
     );

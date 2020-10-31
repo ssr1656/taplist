@@ -98,27 +98,59 @@
   .tap-no {
     width: 6%;
   }
-  .gravity-color, .balance-bitterness, .calories-alcohol {
+  .gravity-color, .balance-bitterness {
     width: 11%;
   }
   
   .beer-details {
-    width: 61%;
+    width: 72%;
   }
   
-  .pour-column {
+  .pour-column-visible {
     .tap-no {
       width: 5%;
     }
-    .gravity-color, .balance-bitterness, .calories-alcohol{
+    .gravity-color{
       width: 9%;
     }
-    .poured-remaining {
+    .poured-remaining, .balance-bitterness {
       width: 13%;
     }
   
     .beer-details {
-      width: 55%;
+      width: 60%;
+    }
+  }
+
+  .calorie-alcohol-visible {
+    .tap-no {
+      width: 5%;
+    }
+    .gravity-color, .calories-alcohol{
+      width: 9%;
+    }
+    .balance-bitterness {
+      width: 13%;
+    }
+  
+    .beer-details {
+      width: 64%;
+    }
+  }
+
+  .pour-column-visible.calorie-alcohol-visible {
+    .tap-no {
+      width: 5%;
+    }
+    .gravity-color, .calories-alcohol{
+      width: 9%;
+    }
+    .poured-remaining, .balance-bitterness  {
+      width: 13%;
+    }
+  
+    .beer-details {
+      width: 51%;
     }
   }
   

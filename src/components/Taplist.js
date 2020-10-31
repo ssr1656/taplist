@@ -9,10 +9,13 @@ export default class Taplist extends Component {
       data: {
         displayPourColumn: true,
         displayServingGlasses: false,
+        displayCalorieAlcoholColumn: true,
         headerFontSize: 14,
         beerNameFontSize: 18,
         beerStyleFontSize: 14,
         beerDescriptionFontSize: 12,
+        measurementUnit: 'oz',
+        gravityUnit: 'oz',
         tapList: [
           {
             gravity: 1.066,
@@ -50,6 +53,19 @@ export default class Taplist extends Component {
       if (localData.displayServingGlasses === undefined) {
         localData.displayServingGlasses = false
       }
+      if (localData.displayCalorieAlcoholColumn === undefined) {
+        localData.displayCalorieAlcoholColumn = true
+      }
+      if(localData.measurementUnit === undefined) {
+        localData.measurementUnit = 'oz';
+      }
+      if (localData.display2Columns === undefined) {
+        localData.display2Columns = false;
+      }
+      if (localData.gravityUnit === undefined) {
+        localData.gravityUnit = 'oz';
+      }
+
       localData.tapList.forEach(element => {
         if (!element.servingSize_s) {
           element.servingSize_s = taplist.servingSize_s
@@ -64,9 +80,6 @@ export default class Taplist extends Component {
           element.isBottled = taplist.isBottled
         }
       });
-      if (localData.display2Columns === undefined) {
-        localData.display2Columns = false;
-      }
       this.setState({ data: localData }, () => {
         localStorage.setItem('finalData', JSON.stringify(this.state.data));
       })
@@ -100,14 +113,68 @@ export default class Taplist extends Component {
     })
   }
 
+  getClassNames(displayPourColumn, display2Columns, displayCalorieAlcoholColumn){
+    let classString = '';
+    if(displayPourColumn){
+      classString += ' pour-column-visible'
+    }
+    if(display2Columns) {
+      classString += ' two-column'
+    }
+    if(displayCalorieAlcoholColumn) {
+      classString += ' calorie-alcohol-visible'
+    }
+    return classString;
+  }
+
+  getVolume(quantity, isPoured){
+    const {measurementUnit} = this.state.data;
+    if(measurementUnit === 'oz') {
+      if(isPoured){
+        return `${Math.round(quantity*100)/100} fl oz poured`
+      } else {
+        return `${Math.round(quantity*100)/100} fl oz remaining`
+      }
+    } else if (measurementUnit === 'ml') {
+      let newQuantity = quantity;
+      let txt = 'ml';
+      if(quantity > 999) {
+        newQuantity = quantity/1000;
+        txt = 'liter'
+      }
+      if(isPoured){
+        return `${Math.round(newQuantity*100)/100} ${txt} poured`
+      } else {
+        return `${Math.round(newQuantity*100)/100} ${txt} remaining`
+      }
+    } else if(measurementUnit === 'dl') {
+      if(isPoured){
+        return `${Math.round(quantity*100)/100} dl poured`
+      } else {
+        return `${Math.round(quantity*100)/100} dl remaining`
+      }
+    } else if(measurementUnit === 'glass') {
+      let txt = 'glasses';
+      if(quantity < 2) {
+        txt = 'glass';
+      }
+      if(isPoured){
+        return `${Math.round(quantity*100)/100} ${txt} poured`
+      } else {
+        return `${Math.round(quantity*100)/100} ${txt} remaining`
+      }
+    } 
+  }
+
   getHeader() {
     const {
       displayPourColumn,
       headerFontSize,
-      display2Columns
+      display2Columns,
+      displayCalorieAlcoholColumn
     } = this.state.data
     return (
-      <div className={"list-header " + (displayPourColumn ? 'pour-column ' : ' ') + (display2Columns ? 'two-column' : '')} style={{ fontSize: headerFontSize }} onClick={this.props.headerClicked}>
+      <div className={"list-header" + this.getClassNames(displayPourColumn, display2Columns, displayCalorieAlcoholColumn)} style={{ fontSize: headerFontSize }} onClick={this.props.headerClicked}>
         <div className="tap-no header-item">
           <div>Tap</div>
           <div>#</div>
@@ -124,10 +191,10 @@ export default class Taplist extends Component {
           <div>Beer Name & Style</div>
           <div>Tasting Notes</div>
         </div>
-        <div className="calories-alcohol header-item">
+        {displayCalorieAlcoholColumn && <div className="calories-alcohol header-item">
           <div>Calories</div>
           <div>Alcohol</div>
-        </div>
+        </div>}
         {displayPourColumn && <div className="poured-remaining header-item">
           <div>Poured</div>
           <div>Remaining</div>
@@ -146,7 +213,9 @@ export default class Taplist extends Component {
       beerNameFontSize,
       beerStyleFontSize,
       beerDescriptionFontSize,
-      display2Columns
+      display2Columns,
+      displayCalorieAlcoholColumn,
+      gravityUnit
     } = this.state.data
 
 
@@ -162,29 +231,29 @@ export default class Taplist extends Component {
             const totalOriginalQuantity = item.quantity + item.poured;
             const filled = ((totalOriginalQuantity - item.poured) / totalOriginalQuantity) * 100;
             return (
-              <div className={"tap-row " + (displayPourColumn ? 'pour-column ' : ' ') + (display2Columns ? 'two-column' : '')} key={i} style={{ fontSize: beerDescriptionFontSize }}>
+              <div className={"tap-row" + this.getClassNames(displayPourColumn, display2Columns, displayCalorieAlcoholColumn)} key={i} style={{ fontSize: beerDescriptionFontSize }}>
                 <div className="tap-no row-item">{i + 1}</div>
                 <div className="gravity-color row-item">
-                  <div className="og ">
-                    {item.gravity} OG
-                </div>
+                  {item.gravity > 0 && <div className="og ">
+                    {item.gravity} {gravityUnit}
+                  </div>}
                   <div className="glass-icon">
                     <GlassIcon srm={item.color} />
                   </div>
-                  <div className="srm ">
+                  {item.color > 0 && <div className="srm ">
                     {item.color} SRM
-                </div>
+                  </div>}
                 </div>
                 <div className="balance-bitterness row-item">
-                  <div className="og">
+                  {item.balance > 0 && <div className="og">
                     {item.balance} BU:GU
-                </div>
+                  </div>}
                   <div className="hop-icon">
                     <HopIcon bitterness={item.bitterness} index={i} />
                   </div>
-                  <div className="srm">
+                  {item.bitterness > 0 && <div className="srm">
                     {item.bitterness} IBU
-                </div>
+                  </div>}
                 </div>
 
                 <div className="beer-details row-item">
@@ -212,23 +281,23 @@ export default class Taplist extends Component {
                   </div>}
                 </div>
 
-                <div className="calories-alcohol row-item">
-                  <div className="beer-calories">
+                {displayCalorieAlcoholColumn && <div className="calories-alcohol row-item">
+                  {item.calories > 0 && <div className="beer-calories">
                     {item.calories} Kcal
-                </div>
-                  <div className="beer-alcohol">
+                  </div>}
+                  {item.alcohol > 0 && <div className="beer-alcohol">
                     {item.alcohol}% ABV
-                </div>
-                </div>
+                  </div>}
+                </div>}
                 {displayPourColumn && !item.isBottled && <div className="poured-remaining row-item">
                   <div className="beer-poured">
-                    {item.poured} fl oz poured
+                    {this.getVolume(item.poured, true)}
                 </div>
                   <div className="keg-icon" onClick={event => this.onKegClick(i, event)}>
                     <KegIcon fill={filled} index={i} />
                   </div>
                   <div className="beer-remaining">
-                    {item.quantity} fl oz remaining
+                  {this.getVolume(item.quantity, false)}
                 </div>
                 </div>}
                 {displayPourColumn && item.isBottled && <div className="poured-remaining row-item">
