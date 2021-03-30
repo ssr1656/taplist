@@ -1,7 +1,7 @@
-import React, { Component } from 'react'
-import './App.scss';
-import Taplist from './components/Taplist';
-import SettingManager from './components/SettingManager';
+import React, { Component } from "react";
+import "./App.scss";
+import Taplist from "./components/Taplist";
+import SettingManager from "./components/SettingManager";
 
 class App extends Component {
   constructor(props) {
@@ -10,51 +10,58 @@ class App extends Component {
       pageTitle: "My Taplist",
       view: "list",
       displayTitleBar: true,
-      titleFontSize: 50
-    }
+      titleFontSize: 50,
+    };
     this.switchView = this.switchView.bind(this);
     this.onDataChange = this.onDataChange.bind(this);
   }
 
   componentDidMount() {
-    const localData = JSON.parse(localStorage.getItem("finalData"))
-    if(localData) {
-      this.setState({pageTitle: localData.pageTitle, displayTitleBar: localData.displayTitleBar, titleFontSize: localData.titleFontSize});
+    const localData = JSON.parse(localStorage.getItem("finalData"));
+    if (localData) {
+      this.setState({
+        pageTitle: localData.pageTitle,
+        displayTitleBar: localData.displayTitleBar,
+        titleFontSize: localData.titleFontSize,
+      });
     }
   }
 
   switchView(view) {
-    this.setState({view: this.state.view === "list"? "settings" : "list"})
+    this.setState({ view: this.state.view === "list" ? "settings" : "list" });
   }
 
   onDataChange(data) {
     this.setState({
-      displayTitleBar: data.displayTitleBar, 
-      titleFontSize: data.titleFontSize, 
-      pageTitle: data.pageTitle
+      displayTitleBar: data.displayTitleBar,
+      titleFontSize: data.titleFontSize,
+      pageTitle: data.pageTitle,
     });
   }
   render() {
-    const {view, displayTitleBar, titleFontSize, pageTitle} = this.state;
+    const { view, displayTitleBar, titleFontSize, pageTitle } = this.state;
     const titleStyle = {
-      fontSize: titleFontSize
-    }
+      fontSize: titleFontSize,
+    };
     return (
-      <div className="App">
-        {displayTitleBar && <header>
-          <div className="title" style={titleStyle}>
-            {pageTitle}
-          </div>
-          <div className="second-logo">
-            {/* Optional */}
-          </div>
-        </header>}
+      <div className={`App ${view === "settings" ? "settings" : ""}`}>
+        {displayTitleBar && (
+          <header>
+            <div className="title" style={titleStyle}>
+              {pageTitle}
+            </div>
+            <div className="second-logo">{/* Optional */}</div>
+          </header>
+        )}
         <main>
-          {view === "list"
-            ? <Taplist className="kegged" headerClicked={this.switchView}/>
-            : <SettingManager switchView={this.switchView} onDataChange={this.onDataChange}/>
-          }
-          
+          {view === "list" ? (
+            <Taplist className="kegged" headerClicked={this.switchView} />
+          ) : (
+            <SettingManager
+              switchView={this.switchView}
+              onDataChange={this.onDataChange}
+            />
+          )}
         </main>
         {/* <footer>Footer</footer> */}
       </div>
